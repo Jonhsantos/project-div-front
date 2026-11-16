@@ -1,0 +1,18 @@
+.terms-page { min-height: 100vh; background: #eef0f2; color: #1c1c1c; font-family: 'Inter Variable', Inter, Arial, sans-serif; }
+.terms-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 48px; background: #fafaff; }
+.terms-logo { width: 105px; height: 38px; object-fit: contain; object-position: left center; }
+.terms-back { min-height: 44px; padding: 10px 14px; border: 1px solid #1c1c1c; border-radius: 8px; background: transparent; font-size: 14px; font-weight: 600; }
+.terms-content { display: flex; flex-direction: column; gap: 18px; padding: 48px 180px; }
+.terms-content h1 { margin: 0; font-size: 32px; line-height: 1.2; font-weight: 700; }
+.terms-content p { margin: 0; font-size: 14px; line-height: 1.5; }
+.terms-notice { padding: 14px; border-radius: 8px; background: #daddd8; }
+.terms-section { display: flex; flex-direction: column; gap: 8px; }
+.terms-section h2 { margin: 0; font-size: 16px; line-height: 1.2; font-weight: 700; }
+.terms-back:focus-visible { outline: 3px solid #1c1c1c; outline-offset: 2px; }
+@media (max-width: 900px) { .terms-content { padding-inline: 48px; } }
+@media (max-width: 650px) {
+  .terms-header { padding: 18px 22px; }
+  .terms-logo { width: 90px; }
+  .terms-content { padding: 28px 22px; }
+  .terms-content h1 { font-size: 26px; }
+}

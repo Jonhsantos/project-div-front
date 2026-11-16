@@ -1,0 +1,59 @@
+.auth-layout { min-height: 100vh; display: flex; }
+.auth-layout { font-family: 'Inter Variable', Inter, Arial, sans-serif; }
+.auth-layout :is(button, input):focus-visible { outline: 3px solid #1c1c1c; outline-offset: 2px; }
+.login-mobile-text, .register-mobile-text { display: none; }
+.terms-button { position: fixed; z-index: 2; left: 20px; bottom: 20px; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #eef0f2; border-radius: 8px; background: #eef0f2; color: #1c1c1c; }
+.presentation { flex: 0 0 530px; background: #ecebe4; padding: 64px; display: flex; flex-direction: column; gap: 26px; }
+.logo { width: 105px; height: 38px; object-fit: contain; object-position: left center; }
+.eyebrow { font-size: 12px; font-weight: 700; }
+.presentation h1 { max-width: 390px; font-size: 36px; line-height: 1.18; font-weight: 700; margin: 0; }
+.presentation-description { max-width: 365px; font-size: 16px; line-height: 1.5; }
+.content { flex: 1; display: flex; align-items: center; padding: 72px 100px; }
+.form-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 16px; font-size: 14px; }
+.form-container.register { gap: 13px; }
+.form-container.register .eyebrow { font-weight: 600; }
+.form-container h2 { margin: 0; font-size: 30px; line-height: 1.2; font-weight: 700; }
+.form-container p, .presentation p { margin: 0; }
+.field { display: flex; flex-direction: column; gap: 7px; font-size: 12px; font-weight: 600; }
+.field input { width: 100%; height: 48px; padding: 13px 14px; border: 1px solid #daddd8; border-radius: 7px; background: #fafaff; color: #1c1c1c; font-size: 13px; font-weight: 400; }
+.field input::placeholder { color: #676767; opacity: 1; }
+.profiles { display: flex; align-items: center; gap: 20px; border: 0; padding: 0; margin: 0; font-size: 13px; font-weight: 600; }
+.profiles legend { float: left; margin-right: 20px; }
+.profiles label { display: inline-flex; align-items: center; gap: 5px; }
+.profiles input { accent-color: #1c1c1c; }
+.primary { min-height: 48px; width: 100%; background: #1c1c1c; color: #fafaff; border: 0; border-radius: 8px; font-size: 13px; font-weight: 600; }
+.primary:disabled { opacity: .6; cursor: wait; }
+.switch { font-size: 13px; font-weight: 600; }
+.switch button { border: 0; background: none; padding: 0 0 0 4px; text-decoration: underline; }
+.message { padding: 12px; border-radius: 7px; font-size: 12px; }
+.error { background: #fbe9e7; color: #8f2d2a; }
+.success { background: #e3f3e8; color: #24583a; }
+@media (max-width: 1000px) { .presentation { flex-basis: 40%; padding: 48px 32px; } .content { padding: 64px 48px; } }
+@media (max-width: 650px) { .auth-layout { flex-direction: column; } .presentation { padding: 32px 24px; gap: 16px; } .presentation h1 { font-size: 28px; } .content { padding: 40px 24px 56px; justify-content: center; } }
+@media (max-width: 650px) {
+  .terms-button { left: auto; right: 20px; }
+  .is-login .presentation { flex: none; padding: 18px 22px; background: #fafaff; }
+  .is-login .presentation > :not(.logo) { display: none; }
+  .is-login .logo { width: 90px; height: 38px; }
+  .is-login .content { flex: none; align-items: flex-start; padding: 24px 22px 80px; }
+  .is-login .form-container { max-width: none; gap: 16px; font-size: 13px; }
+  .is-login .form-container .eyebrow { font-size: 10px; }
+  .is-login .form-container h2 { font-size: 25px; }
+  .is-login .field { gap: 6px; }
+  .is-login .field input { padding: 12px; }
+  .is-login .error { padding: 18px; border: 1px solid #daddd8; border-radius: 10px; }
+  .is-login .login-desktop-text { display: none; }
+  .is-login .login-mobile-text { display: inline; }
+  .is-register .presentation { flex: none; padding: 18px 22px; background: #fafaff; }
+  .is-register .presentation > :not(.logo) { display: none; }
+  .is-register .logo { width: 90px; height: 38px; }
+  .is-register .content { flex: none; align-items: flex-start; padding: 24px 22px 80px; }
+  .is-register .form-container { max-width: none; gap: 16px; font-size: 13px; }
+  .is-register .form-container .eyebrow { font-size: 10px; font-weight: 700; }
+  .is-register .form-container h2 { font-size: 25px; }
+  .is-register .field { gap: 6px; }
+  .is-register .field input { padding: 12px; }
+  .is-register .error { padding: 18px; border: 1px solid #daddd8; border-radius: 10px; }
+  .is-register .register-desktop-text { display: none; }
+  .is-register .register-mobile-text { display: inline; }
+}
