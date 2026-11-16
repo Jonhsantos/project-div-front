@@ -1,5 +1,17 @@
 # React + Vite
 
+## Organização do frontend DIV
+
+- `src/App.jsx`: composição inicial e estado de autenticação.
+- `src/features/auth/`: estilos e chamadas de autenticação.
+- `src/features/trips/`: telas, componentes, estilos e chamadas de viagens.
+- `src/features/expenses/`: componentes e chamadas de despesas.
+- `src/services/api.js`: cliente HTTP compartilhado.
+- `src/assets/`: arquivos estáticos do frontend.
+- `dev.pen` e `div-logo-oficial.png`: design oficial e imagem referenciada pelo arquivo de design; mantidos na raiz.
+
+Para executar, copie `.env.example` para `.env`, configure `VITE_API_URL` e rode `npm install` seguido de `npm run dev`. O backend precisa estar disponível no endereço configurado.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:
