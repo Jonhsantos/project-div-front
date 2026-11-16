@@ -1,10 +1,31 @@
 @import 'tailwindcss';
 
-:root { font-family: Inter, Arial, sans-serif; color: #1c1c1c; background: #eef0f2; font-synthesis: none; }
+:root { font-family: Inter, Arial, sans-serif; color: #1c1c1c; background: #eef0f2; font-synthesis: none; --motion-fast: 160ms; --motion-component: 220ms; --motion-page: 240ms; --motion-ease-out: cubic-bezier(.2, 0, 0, 1); }
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; }
 button, input { font: inherit; }
 button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+:is(form, .field) :is(input, textarea, select) { outline: 2px solid transparent; outline-offset: 2px; }
+.field :is(input, textarea, select):focus { border-color: #515b55; box-shadow: 0 0 0 4px rgba(81, 91, 85, .18); }
+.auth-layout :is(form, .field) :is(input, textarea, select):focus-visible, .workspace :is(form, .field) :is(input, textarea, select):focus-visible { outline: 2px solid #1c1c1c; outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  button { transition: background-color var(--motion-fast) ease, border-color var(--motion-fast) ease, color var(--motion-fast) ease, box-shadow var(--motion-fast) ease, transform var(--motion-fast) var(--motion-ease-out); }
+  button:not(:disabled):active { transform: scale(.98); }
+  .details-link .material-icon, .expense-open-button .material-icon { transition: transform var(--motion-fast) var(--motion-ease-out); }
+  :is(form, .field) :is(input, textarea, select) { transition: border-color var(--motion-component) ease, box-shadow var(--motion-component) var(--motion-ease-out), outline-color var(--motion-component) ease; }
+  .message, .motion-enter, .review-panel { animation: motion-enter var(--motion-component) var(--motion-ease-out) both; }
+  .loading-skeleton-card span { animation: skeleton-pulse 1.4s ease-in-out infinite alternate; }
+  @media (hover: hover) {
+    .details-link:hover .material-icon, .expense-open-button:hover .material-icon { transform: translateX(3px); }
+    :is(.primary, .workspace-button):not(:disabled):hover { background-color: #343434; }
+    :is(.secondary-button, .terms-back, .terms-button, .sidebar-logout):not(:disabled):hover { background-color: #ecebe4; }
+    .trip-grid .trip-card { transition: transform var(--motion-component) var(--motion-ease-out), box-shadow var(--motion-component) ease; }
+    .trip-grid .trip-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(28, 28, 28, .08); }
+  }
+}
+@keyframes motion-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes skeleton-pulse { from { opacity: .5; } to { opacity: 1; } }
 button:focus-visible, input:focus-visible { outline: 2px solid #515b55; outline-offset: 2px; }
 .material-icon { width: 18px; height: 18px; display: inline-block; vertical-align: middle; flex-shrink: 0; }
 .button-icon { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
