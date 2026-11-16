@@ -34,6 +34,11 @@
 .workspace-button:disabled { opacity: .6; cursor: wait; }
 .secondary-button { color: #1c1c1c; background: #fafaff; border-color: #daddd8; }
 .trip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.loading-skeleton-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.loading-skeleton-card { min-height: 150px; padding: 22px; border: 1px solid #daddd8; border-radius: 12px; background: #fafaff; display: flex; flex-direction: column; gap: 14px; }
+.loading-skeleton-card span { height: 12px; width: 65%; border-radius: 6px; background: #daddd8; }
+.loading-skeleton-card span:first-child { width: 80%; height: 16px; }
+.loading-skeleton-card span:last-child { width: 40%; }
 .trip-filters { display: flex; flex-wrap: wrap; gap: 20px; padding: 0 0 20px; font-size: 13px; }
 .trip-filters button { padding: 6px 0; border-bottom: 2px solid transparent; }
 .trip-filters button[aria-pressed="true"] { font-weight: 700; border-color: #1c1c1c; }
@@ -95,7 +100,16 @@
   .mobile-workspace-header .logo { width: 90px; height: 38px; }
   .mobile-menu-toggle { min-height: 44px; display: flex; align-items: center; gap: 10px; border: 0; padding: 0; background: transparent; font-size: 12px; font-weight: 600; }
   .mobile-menu-toggle > span[aria-hidden] { font-size: 20px; }
-  .mobile-navigation:not([hidden]) { display: flex; flex-direction: column; gap: 4px; background: #fafaff; border-bottom: 1px solid #daddd8; padding: 12px 22px; }
+  .mobile-navigation { display: grid; grid-template-rows: 0fr; visibility: hidden; background: #fafaff; border-bottom: 1px solid transparent; }
+  .mobile-navigation-inner { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 4px; padding: 0 22px; }
+  .mobile-navigation.is-open { grid-template-rows: 1fr; visibility: visible; border-bottom-color: #daddd8; }
+  .mobile-navigation.is-open .mobile-navigation-inner { padding: 12px 22px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .mobile-navigation { transition: grid-template-rows var(--motion-component) ease, visibility var(--motion-component), border-color var(--motion-component) ease; }
+    .mobile-navigation-inner { transition: padding var(--motion-component) ease; }
+    .mobile-menu-toggle .material-icon { transition: transform var(--motion-component) ease; }
+    .mobile-menu-toggle[aria-expanded="true"] .material-icon { transform: rotate(90deg); }
+  }
   .mobile-navigation button { min-height: 44px; font-size: 14px; }
   .workspace-content { padding: 24px 22px 80px; }
   .workspace-heading > .secondary-button.button-icon { align-self: flex-start; min-height: 44px; padding: 8px 4px; border-color: transparent; background: transparent; }

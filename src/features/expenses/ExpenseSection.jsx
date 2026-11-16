@@ -6,6 +6,7 @@ import ExpenseDelete from './ExpenseDelete'
 import ExpenseSummary from './ExpenseSummary'
 import { currencyToDecimal } from './currency'
 import Icon from '../../components/Icon'
+import LoadingSkeleton from '../../components/LoadingSkeleton'
 
 function dateLabel(value) {
   const [year, month, day] = value.split('-')
@@ -80,14 +81,14 @@ export default function ExpenseSection({ token, tripId, isLeader, tripStatus, tr
     setNotice('Despesa e comprovante excluídos.')
   }
 
-  if (active && showForm) return <section className="expense-registration">
+  if (active && showForm) return <section className="expense-registration motion-enter">
     <div className="workspace-heading expense-registration-heading"><div><p className="eyebrow">VIAGEM / {editing ? 'EDITAR DESPESA' : 'NOVA DESPESA'}</p><h1>{editing ? 'Editar despesa' : 'Registrar despesa'}</h1><p>Adicione as informações para conferência pelo líder.</p><p className="expense-registration-mobile-trip">Viagem: {tripTitle}</p></div></div>
     <ExpenseForm key={editing?.id_despesa || 'new'} tripTitle={tripTitle} expense={editing} saving={saving} onSubmit={submitExpense} onCancel={() => { setShowForm(false); setEditing(null); setError('') }} />
     {error && <p className="message error" role="alert">{error}</p>}
   </section>
 
   const selected = expenses?.find((expense) => expense.id_despesa === selectedId)
-  if (selected) return <section className={`expense-detail-view ${isLeader ? 'expense-review-view' : ''}`}>
+  if (selected) return <section className={`expense-detail-view motion-enter ${isLeader ? 'expense-review-view' : ''}`}>
     <div className="workspace-heading expense-detail-heading"><div><p className="eyebrow"><span className="expense-detail-desktop-path">VIAGEM / DESPESA #{selected.id_despesa}</span><span className="expense-detail-mobile-path">MINHAS VIAGENS / {isLeader ? 'CONFERIR DESPESA' : 'DETALHES DA DESPESA'}</span></p><h1>{isLeader ? 'Conferir despesa' : 'Detalhes da despesa'}</h1><p>Revise as informações e o comprovante do lançamento.</p></div><button className="secondary-button button-icon" type="button" onClick={() => { setSelectedId(null); setError('') }}><Icon name="arrowBack" /> Voltar</button></div>
     {error && <p className="message error" role="alert">{error}</p>}
     <div className="expense-detail-grid">
@@ -115,7 +116,7 @@ export default function ExpenseSection({ token, tripId, isLeader, tripStatus, tr
       </div>
       {notice && <p className="message success" role="status">{notice}</p>}
       {error && <div className="message error" role="alert">{error} {!showForm && <button type="button" onClick={() => { setError(''); setExpenses(null); setRetry((n) => n + 1) }}>Tentar novamente</button>}</div>}
-      {!expenses && !error && <p role="status">Carregando despesas...</p>}
+      {!expenses && !error && <LoadingSkeleton label="Carregando despesas..." />}
       {expenses && !expenses.length && <p>Nenhuma despesa registrada.</p>}
       {expenses?.map((expense) => <article className="expense-item" key={expense.id_despesa}>
         <div>
