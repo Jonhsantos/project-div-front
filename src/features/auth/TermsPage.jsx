@@ -19,7 +19,7 @@ export default function TermsPage({ onBack }) {
     </header>
     <article className="terms-content">
       <h1>Termos de uso</h1>
-      <p className="terms-notice">Rascunho para revisão. O AT10 descreve requisitos de segurança, não termos jurídicos definitivos.</p>
+      <p className="terms-notice">Termos de uso do DIV</p>
       {sections.map(([title, text]) => <section className="terms-section" key={title}><h2>{title}</h2><p>{text}</p></section>)}
     </article>
   </main>
