@@ -14967,6 +14967,36 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "ZBui0",
+      "x": 36870,
+      "y": -3202,
+      "name": "DIV · Ícone do navegador",
+      "clip": true,
+      "width": 128,
+      "height": 128,
+      "fill": "#ECEBE4",
+      "cornerRadius": 24,
+      "layout": "vertical",
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "XgnWA",
+          "name": "Logo DIV oficial",
+          "width": 112,
+          "height": 56,
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "div-logo-oficial.png",
+            "mode": "contain"
+          }
+        }
+      ]
     }
   ],
   "variables": {
