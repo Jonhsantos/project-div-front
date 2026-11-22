@@ -1,28 +1,33 @@
-import { useState } from 'react'
-import { closeTrip } from './tripsApi'
+import { useEffect, useRef } from 'react'
+import Icon from '../../components/Icon'
 
-export default function TripClose({ token, tripId, onClosed }) {
-  const [confirming, setConfirming] = useState(false)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
-
-  async function close() {
-    setError('')
-    setSaving(true)
-    try {
-      const trip = await closeTrip(token, tripId)
-      onClosed(trip)
-    } catch (err) {
-      setError(err.message || 'Não foi possível encerrar a viagem.')
-    } finally { setSaving(false) }
-  }
-
-  return <div className="trip-close">
-    {!confirming ? <button className="secondary-button" type="button" onClick={() => setConfirming(true)}>Encerrar viagem</button> : <div className="review-panel">
-      <p>Após o encerramento, a viagem e as despesas ficarão somente para consulta. Todas as despesas precisam estar conferidas.</p>
-      <button className="workspace-button" type="button" onClick={close} disabled={saving}>{saving ? 'Encerrando...' : 'Confirmar encerramento'}</button>
-      <button className="secondary-button" type="button" onClick={() => setConfirming(false)} disabled={saving}>Cancelar</button>
-    </div>}
-    {error && <p className="message error" role="alert">{error}</p>}
+export default function TripClose({ controller, className = '' }) {
+  return <div className={`trip-close ${className}`}>
+    <button className="secondary-button" type="button" onClick={controller.open}>Encerrar viagem</button>
   </div>
+}
+
+export function TripCloseDialog({ controller }) {
+  const { confirming, cancel, saving, error, close } = controller
+  const dialogRef = useRef(null)
+
+  useEffect(() => {
+    if (!confirming) return
+    const dialog = dialogRef.current
+    dialog.showModal()
+    return () => dialog.close()
+  }, [confirming])
+
+  return <dialog ref={dialogRef} className="trip-close-dialog" aria-labelledby="trip-close-title" aria-describedby="trip-close-description" onCancel={(event) => { event.preventDefault(); if (!saving) cancel() }}>
+    <div className="trip-close-dialog-content">
+      <span className="trip-close-dialog-icon" aria-hidden="true"><Icon name="warning" /></span>
+      <h2 id="trip-close-title">Encerrar viagem?</h2>
+      <p id="trip-close-description">Após o encerramento, a viagem e as despesas ficarão somente para consulta. Todas as despesas precisam estar conferidas.</p>
+      {error && <p className="message error" role="alert">{error}</p>}
+      <div className="trip-close-dialog-actions">
+        <button className="secondary-button" type="button" onClick={cancel} disabled={saving} autoFocus>Cancelar</button>
+        <button className="workspace-button" type="button" onClick={close} disabled={saving}>{saving ? 'Encerrando...' : 'Confirmar encerramento'}</button>
+      </div>
+    </div>
+  </dialog>
 }

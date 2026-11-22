@@ -6,6 +6,7 @@ import ExpenseDelete from './ExpenseDelete'
 import ExpenseSummary from './ExpenseSummary'
 import { currencyToDecimal } from './currency'
 import Icon from '../../components/Icon'
+import BackButton from '../../components/BackButton'
 import LoadingSkeleton from '../../components/LoadingSkeleton'
 
 function dateLabel(value) {
@@ -16,11 +17,10 @@ function dateLabel(value) {
 const categoryLabels = { ALIMENTACAO: 'Alimentação', HOSPEDAGEM: 'Hospedagem', TRANSPORTE: 'Transporte', ALUGUEL: 'Aluguel', OUTROS: 'Outros' }
 const statusLabels = { AGUARDANDO_CONFERENCIA: 'Aguardando conferência', CONFERIDA: 'Conferida', PENDENTE_CORRECAO: 'Pendente de correção' }
 
-export default function ExpenseSection({ token, tripId, isLeader, tripStatus, tripTitle, participants = [] }) {
+export default function ExpenseSection({ token, tripId, userId, isLeader, tripStatus, tripTitle, tripStartDate, participants = [], showForm, setShowForm }) {
   const [expenses, setExpenses] = useState(null)
   const [error, setError] = useState('')
   const [retry, setRetry] = useState(0)
-  const [showForm, setShowForm] = useState(false)
   const [saving, setSaving] = useState(false)
   const [notice, setNotice] = useState('')
   const [editing, setEditing] = useState(null)
@@ -82,25 +82,25 @@ export default function ExpenseSection({ token, tripId, isLeader, tripStatus, tr
   }
 
   if (active && showForm) return <section className="expense-registration motion-enter">
-    <div className="workspace-heading expense-registration-heading"><div><p className="eyebrow">VIAGEM / {editing ? 'EDITAR DESPESA' : 'NOVA DESPESA'}</p><h1>{editing ? 'Editar despesa' : 'Registrar despesa'}</h1><p>Adicione as informações para conferência pelo líder.</p><p className="expense-registration-mobile-trip">Viagem: {tripTitle}</p></div></div>
-    <ExpenseForm key={editing?.id_despesa || 'new'} tripTitle={tripTitle} expense={editing} saving={saving} onSubmit={submitExpense} onCancel={() => { setShowForm(false); setEditing(null); setError('') }} />
+    <div className="workspace-heading expense-registration-heading"><div><p className="eyebrow">VIAGEM / {editing ? 'EDITAR DESPESA' : 'NOVA DESPESA'}</p><div className="back-title"><BackButton disabled={saving} onClick={() => { setShowForm(false); setEditing(null); setError('') }} /><h1>{editing ? 'Editar despesa' : 'Registrar despesa'}</h1></div><p>Adicione as informações para conferência pelo líder.</p><p className="expense-registration-mobile-trip">Viagem: {tripTitle}</p></div></div>
+    <ExpenseForm key={editing?.id_despesa || 'new'} tripTitle={tripTitle} tripStartDate={tripStartDate} expense={editing} saving={saving} onSubmit={submitExpense} onCancel={() => { setShowForm(false); setEditing(null); setError('') }} />
     {error && <p className="message error" role="alert">{error}</p>}
   </section>
 
   const selected = expenses?.find((expense) => expense.id_despesa === selectedId)
   if (selected) return <section className={`expense-detail-view motion-enter ${isLeader ? 'expense-review-view' : ''}`}>
-    <div className="workspace-heading expense-detail-heading"><div><p className="eyebrow"><span className="expense-detail-desktop-path">VIAGEM / DESPESA #{selected.id_despesa}</span><span className="expense-detail-mobile-path">MINHAS VIAGENS / {isLeader ? 'CONFERIR DESPESA' : 'DETALHES DA DESPESA'}</span></p><h1>{isLeader ? 'Conferir despesa' : 'Detalhes da despesa'}</h1><p>Revise as informações e o comprovante do lançamento.</p></div><button className="secondary-button button-icon" type="button" onClick={() => { setSelectedId(null); setError('') }}><Icon name="arrowBack" /> Voltar</button></div>
+    <div className="workspace-heading expense-detail-heading"><div><p className="eyebrow"><span className="expense-detail-desktop-path">VIAGEM / DESPESA #{selected.id_despesa}</span><span className="expense-detail-mobile-path">MINHAS VIAGENS / {isLeader ? 'CONFERIR DESPESA' : 'DETALHES DA DESPESA'}</span></p><div className="back-title"><BackButton onClick={() => { setSelectedId(null); setError('') }} /><h1>{isLeader ? 'Conferir despesa' : 'Detalhes da despesa'}</h1></div><p>Revise as informações e o comprovante do lançamento.</p></div></div>
     {error && <p className="message error" role="alert">{error}</p>}
     <div className="expense-detail-grid">
       <section className="trip-card expense-detail-card">
         <div className="trip-card-heading"><h2>{selected.descricao}<span className="expense-mobile-value"> · R$ {selected.valor.replace('.', ',')}</span></h2><span className={`expense-detail-status status-${selected.status.toLowerCase()}`}>{({ AGUARDANDO_CONFERENCIA: 'Aguardando conferência', CONFERIDA: 'Conferida', PENDENTE_CORRECAO: 'Pendente de correção' })[selected.status]}</span></div>
         <p>Despesa #{selected.id_despesa} · {tripTitle}</p>
-        <dl className="expense-detail-data"><div className="expense-detail-value"><dt>Valor</dt><dd>R$ {selected.valor.replace('.', ',')}</dd></div><div><dt>Data</dt><dd>{dateLabel(selected.data_despesa)}</dd></div><div className="expense-detail-category"><dt>Categoria</dt><dd>{categoryLabels[selected.categoria] || selected.categoria.replaceAll('_', ' ')}</dd></div>{isLeader && <div><dt>Técnico</dt><dd>{participants.find((person) => person.id_usuario === selected.id_usuario)?.nome || 'Não disponível'}</dd></div>}<div><dt>Comprovante</dt><dd><button className="details-link" type="button" onClick={() => download(selected.id_despesa)}>Baixar comprovante</button></dd></div></dl>
+        <dl className="expense-detail-data"><div className="expense-detail-value"><dt>Valor</dt><dd>R$ {selected.valor.replace('.', ',')}</dd></div><div><dt>Data</dt><dd>{dateLabel(selected.data_despesa)}</dd></div><div className="expense-detail-category"><dt>Categoria</dt><dd>{categoryLabels[selected.categoria] || selected.categoria.replaceAll('_', ' ')}</dd></div>{isLeader && <div><dt>Responsável</dt><dd>{participants.find((person) => person.id_usuario === selected.id_usuario)?.nome || 'Não disponível'}</dd></div>}<div><dt>Comprovante</dt><dd><button className="details-link" type="button" onClick={() => download(selected.id_despesa)}>Baixar comprovante</button></dd></div></dl>
         {selected.motivo_correcao && <p className="message error"><strong>Motivo da correção:</strong> {selected.motivo_correcao}</p>}
       </section>
       <section className="trip-card expense-detail-actions"><h2>{isLeader ? 'Conferência' : 'Ações disponíveis'}</h2><p>{isLeader ? 'Analise antes de decidir.' : 'Gerencie este lançamento.'}</p>
         {isLeader && active && selected.status === 'AGUARDANDO_CONFERENCIA' && <ExpenseReview token={token} expense={selected} expanded onReviewed={(updated) => setExpenses((previous) => previous.map((item) => item.id_despesa === updated.id_despesa ? updated : item))} />}
-        {!isLeader && active && selected.status !== 'CONFERIDA' && <button className="workspace-button" type="button" onClick={() => { setEditing(selected); setShowForm(true); setError(''); setNotice('') }}>Editar despesa</button>}
+        {active && selected.id_usuario === userId && selected.status !== 'CONFERIDA' && <button className="workspace-button" type="button" onClick={() => { setEditing(selected); setShowForm(true); setError(''); setNotice('') }}>Editar despesa</button>}
         {active && (isLeader ? selected.status === 'CONFERIDA' : selected.status !== 'CONFERIDA') && <ExpenseDelete token={token} expense={selected} onDeleted={handleDeleted} />}
         <p>{!active ? 'Esta viagem está encerrada e disponível somente para consulta.' : isLeader ? 'Somente despesas conferidas podem ser excluídas pelo líder.' : 'Despesas conferidas não podem ser editadas ou excluídas.'}</p>
       </section>

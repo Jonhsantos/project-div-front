@@ -25,7 +25,7 @@ export default function ExpenseSummary({ token, tripId, isLeader, revision }) {
     <h2>{isLeader ? 'Total da viagem' : 'Minhas despesas'}</h2>
     {error ? <p className="message error" role="alert">{error} <button type="button" onClick={() => setRetry((n) => n + 1)}>Tentar novamente</button></p> : !summary ? <p role="status">Carregando totais...</p> : <>
       <p><strong>{money(summary.total)}</strong> · {summary.quantidade} {summary.quantidade === 1 ? 'despesa' : 'despesas'}</p>
-      {isLeader && summary.por_tecnico.length > 0 && <div><strong>Total por técnico</strong><ul className="participant-list">{summary.por_tecnico.map((person) => <li key={person.id_usuario}>{person.nome}: {money(person.total)} · {person.quantidade} {person.quantidade === 1 ? 'despesa' : 'despesas'}</li>)}</ul></div>}
+      {isLeader && summary.por_tecnico.length > 0 && <div><strong>Total por participante</strong><ul className="participant-list">{summary.por_tecnico.map((person) => <li key={person.id_usuario}>{person.nome}: {money(person.total)} · {person.quantidade} {person.quantidade === 1 ? 'despesa' : 'despesas'}</li>)}</ul></div>}
     </>}
   </section>
 }
