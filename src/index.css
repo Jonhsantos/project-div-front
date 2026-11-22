@@ -29,3 +29,8 @@ button:disabled { cursor: not-allowed; }
 button:focus-visible, input:focus-visible { outline: 2px solid #515b55; outline-offset: 2px; }
 .material-icon { width: 18px; height: 18px; display: inline-block; vertical-align: middle; flex-shrink: 0; }
 .button-icon { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.back-title { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.back-title h1 { min-width: 0; }
+.back-button { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 44px; padding: 0; border: 1px solid #1c1c1c; border-radius: 8px; background: transparent; color: #1c1c1c; }
+.back-button .material-icon { width: 28px; height: 28px; }
+.back-button:hover { background: #ecebe4; }

@@ -55,7 +55,7 @@ export default function Trips({ user, token, onLogout }) {
       return
     }
     if (form.data_fim && form.data_fim < form.data_inicio) {
-      setError('A data de término não pode ser anterior à data de início.')
+      setError('A data prevista de término não pode ser anterior à data de início.')
       return
     }
     setSaving(true)
@@ -139,7 +139,7 @@ export default function Trips({ user, token, onLogout }) {
             {!loading && !error && <TripList trips={visibleTrips} isLeader={isLeader} emptyMessage={section === 'history' || filter === 'ENCERRADA' ? 'Nenhuma viagem encerrada para exibir.' : filter === 'EM_ANDAMENTO' ? 'Nenhuma viagem em andamento para exibir.' : isLeader ? 'Você ainda não criou nenhuma viagem.' : 'Você ainda não participa de nenhuma viagem.'} onOpen={(id) => { setSelectedTrip(id); setView('details') }} />}
           </>
         ) : view === 'details' ? (
-          <TripDetails token={token} tripId={selectedTrip} isLeader={isLeader} onBack={showList} onTripClosed={(closedTrip) => setTrips((previous) => previous.map((trip) => trip.id_viagem === closedTrip.id_viagem ? closedTrip : trip))} />
+          <TripDetails token={token} tripId={selectedTrip} userId={user.id_usuario} isLeader={isLeader} onBack={showList} onTripClosed={(closedTrip) => setTrips((previous) => previous.map((trip) => trip.id_viagem === closedTrip.id_viagem ? closedTrip : trip))} />
         ) : view === 'join' ? (
           <TripJoinForm code={code} onCodeChange={(event) => setCode(event.target.value)} onSubmit={submitJoin} onBack={showList} saving={saving} error={error} />
         ) : (
