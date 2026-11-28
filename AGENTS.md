@@ -20,7 +20,7 @@ Interface web do DIV para gestão de despesas de viagens profissionais. Preserve
 
 ## Design oficial — prioridade obrigatória
 
-- `dev.pen` é a fonte de verdade visual. Use Pencil para inspecionar frames, componentes e propriedades.
+- `dev.pen` é a fonte de verdade visual, mantida localmente fora do repositório. Quando disponível, use Pencil para inspecionar frames, componentes e propriedades.
 - Preserve `div-logo-oficial.png` e sua referência no design; não redesenhe a marca.
 - Reproduza cores, tipografia, ícones, espaçamentos, dimensões, estados e hierarquia visual. Não substitua o design por layouts genéricos.
 - Use Tailwind CSS na estilização nova, preservando CSS existente quando necessário. Não faça migrações amplas sem justificativa.

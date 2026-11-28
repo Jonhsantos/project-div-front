@@ -16,6 +16,7 @@ function dateLabel(value) {
 
 const categoryLabels = { ALIMENTACAO: 'Alimentação', HOSPEDAGEM: 'Hospedagem', TRANSPORTE: 'Transporte', ALUGUEL: 'Aluguel', OUTROS: 'Outros' }
 const statusLabels = { AGUARDANDO_CONFERENCIA: 'Aguardando conferência', CONFERIDA: 'Conferida', PENDENTE_CORRECAO: 'Pendente de correção' }
+const expenseColumns = 'grid grid-cols-2 gap-x-4 gap-y-3 min-[1100px]:grid-cols-[minmax(0,2fr)_minmax(0,1.15fr)_minmax(0,1.2fr)_minmax(0,0.9fr)_minmax(150px,1fr)]'
 
 export default function ExpenseSection({ token, tripId, userId, isLeader, tripStatus, tripTitle, tripStartDate, participants = [], showForm, setShowForm }) {
   const [expenses, setExpenses] = useState(null)
@@ -111,23 +112,21 @@ export default function ExpenseSection({ token, tripId, userId, isLeader, tripSt
     <ExpenseSummary key={summaryRevision} token={token} tripId={tripId} isLeader={isLeader} revision={summaryRevision} />
     <section className={`trip-card ${isLeader ? 'leader-expenses' : 'technician-expenses'}`}>
       <div className="trip-card-heading">
-        <h2>{isLeader ? 'Despesas da viagem' : 'Minhas despesas'}</h2>
+        <div className="flex flex-col gap-1"><h2>{isLeader ? 'Despesas da viagem' : 'Minhas despesas'}</h2><p className="text-xs text-[#5c655f]">{isLeader ? 'Acompanhe os lançamentos da equipe.' : 'Acompanhe seus lançamentos e suas situações.'}</p></div>
         {!isLeader && active && <button className="workspace-button" type="button" disabled={saving} onClick={() => { setShowForm(!showForm); setEditing(null); setError(''); setNotice('') }}>{showForm ? 'Cancelar' : '+ Registrar despesa'}</button>}
       </div>
       {notice && <p className="message success" role="status">{notice}</p>}
       {error && <div className="message error" role="alert">{error} {!showForm && <button type="button" onClick={() => { setError(''); setExpenses(null); setRetry((n) => n + 1) }}>Tentar novamente</button>}</div>}
       {!expenses && !error && <LoadingSkeleton label="Carregando despesas..." />}
       {expenses && !expenses.length && <p>Nenhuma despesa registrada.</p>}
-      {expenses?.map((expense) => <article className="expense-item" key={expense.id_despesa}>
-        <div>
-          <strong>{expense.descricao}</strong>
-          <p>{dateLabel(expense.data_despesa)} · {categoryLabels[expense.categoria] || expense.categoria}</p>
-          <p><span className={`expense-detail-status status-${expense.status.toLowerCase()}`}>{statusLabels[expense.status] || expense.status}</span></p>
-          {expense.motivo_correcao && <p><strong>Motivo da correção:</strong> {expense.motivo_correcao}</p>}
-          <button className={isLeader ? 'expense-open-button' : 'details-link'} type="button" onClick={() => { setSelectedId(expense.id_despesa); setError('') }}>{isLeader ? 'Abrir despesa' : 'Ver detalhes'} <Icon name="arrowForward" /><span className="visually-hidden"> de {expense.descricao}</span></button>
-          {active && isLeader && expense.status === 'CONFERIDA' && <ExpenseDelete token={token} expense={expense} onDeleted={handleDeleted} />}
-        </div>
-        <div><strong>R$ {expense.valor.replace('.', ',')}</strong><br /><button className="details-link" type="button" onClick={() => download(expense.id_despesa)}>Baixar comprovante</button></div>
+      {!!expenses?.length && <div className={`${expenseColumns} hidden border-b border-[#daddd8] pb-2 text-[10px] font-bold text-[#5c655f] min-[1100px]:grid`} aria-hidden="true"><span>{isLeader ? 'DESPESA / RESPONSÁVEL' : 'DESPESA'}</span><span>DATA / CATEGORIA</span><span>SITUAÇÃO</span><span>VALOR</span><span>AÇÕES</span></div>}
+      {expenses?.map((expense) => <article className={`expense-list-row ${expenseColumns} items-start border-b border-[#daddd8] pb-4 last:border-b-0 last:pb-0 min-[1100px]:items-center`} key={expense.id_despesa}>
+        <div className="expense-list-name flex min-w-0 flex-col gap-1"><strong className="text-sm">{expense.descricao}</strong>{isLeader && <p className="text-xs text-[#5c655f]"><span className="visually-hidden">Responsável: </span>{participants.find((person) => person.id_usuario === expense.id_usuario)?.nome || 'Não disponível'}</p>}</div>
+        <div className="expense-list-meta flex min-w-0 flex-col gap-1 text-xs"><p><span className="visually-hidden">Data: </span>{dateLabel(expense.data_despesa)}</p><p className="text-[#5c655f]"><span className="visually-hidden">Categoria: </span>{categoryLabels[expense.categoria] || expense.categoria}</p></div>
+        <div className="expense-list-status min-w-0"><span className="visually-hidden">Situação: </span><span className={`expense-detail-status inline-block status-${expense.status.toLowerCase()}`}>{statusLabels[expense.status] || expense.status}</span></div>
+        <div className="expense-list-value min-w-0"><span className="visually-hidden">Valor: </span><strong className="text-sm">R$ {expense.valor.replace('.', ',')}</strong></div>
+        <div className="expense-list-actions col-span-2 min-w-0 min-[1100px]:col-span-1"><button className="expense-open-button" type="button" onClick={() => { setSelectedId(expense.id_despesa); setError('') }}>Abrir despesa <Icon name="arrowForward" /><span className="visually-hidden"> de {expense.descricao}{isLeader && ` - ${participants.find((person) => person.id_usuario === expense.id_usuario)?.nome || 'Não disponível'}`}</span></button>{isLeader && active && expense.status === 'CONFERIDA' && <ExpenseDelete token={token} expense={expense} onDeleted={handleDeleted} />}</div>
+        {expense.motivo_correcao && <p className="expense-list-reason col-span-2 min-[1100px]:col-span-5"><strong>Motivo da correção:</strong> {expense.motivo_correcao}</p>}
       </article>)}
     </section>
   </>

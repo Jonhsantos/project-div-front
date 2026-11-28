@@ -136,7 +136,7 @@ export default function Trips({ user, token, onLogout }) {
             {joinNotice && <p className="message success" role="status">{joinNotice}</p>}
             {loading && <LoadingSkeleton label="Carregando viagens..." cards={2} />}
             {error && <div className="message error" role="alert">{error} <button type="button" onClick={() => { setLoading(true); setReload((n) => n + 1) }}>Tentar novamente</button></div>}
-            {!loading && !error && <TripList trips={visibleTrips} isLeader={isLeader} emptyMessage={section === 'history' || filter === 'ENCERRADA' ? 'Nenhuma viagem encerrada para exibir.' : filter === 'EM_ANDAMENTO' ? 'Nenhuma viagem em andamento para exibir.' : isLeader ? 'Você ainda não criou nenhuma viagem.' : 'Você ainda não participa de nenhuma viagem.'} onOpen={(id) => { setSelectedTrip(id); setView('details') }} />}
+            {!loading && !error && <TripList trips={visibleTrips} isLeader={isLeader} structured={!isLeader && section === 'list'} emptyMessage={section === 'history' || filter === 'ENCERRADA' ? 'Nenhuma viagem encerrada para exibir.' : filter === 'EM_ANDAMENTO' ? 'Nenhuma viagem em andamento para exibir.' : isLeader ? 'Você ainda não criou nenhuma viagem.' : 'Você ainda não participa de nenhuma viagem.'} onOpen={(id) => { setSelectedTrip(id); setView('details') }} />}
           </>
         ) : view === 'details' ? (
           <TripDetails token={token} tripId={selectedTrip} userId={user.id_usuario} isLeader={isLeader} onBack={showList} onTripClosed={(closedTrip) => setTrips((previous) => previous.map((trip) => trip.id_viagem === closedTrip.id_viagem ? closedTrip : trip))} />

@@ -39,7 +39,6 @@ src/
 └── services/
     └── api.js        # Cliente HTTP
 public/
-dev.pen              # Design oficial
 div-logo-oficial.png # Logo oficial
 package.json
 .env.example
@@ -87,7 +86,7 @@ As permissões são validadas definitivamente pelo backend. Ocultar botões no f
 
 ## Design e experiência
 
-O arquivo `dev.pen`, mantido na raiz, é a referência oficial de interface. Utilize Pencil para consultar os frames. Preserve a identidade visual e o arquivo `div-logo-oficial.png`. A evolução da interface deve priorizar responsividade, acessibilidade, componentização e transições fluidas.
+O arquivo `dev.pen` é a referência oficial de interface, mas é mantido localmente e não acompanha o repositório. Quando disponível, utilize Pencil para consultar os frames. Preserve a identidade visual e o arquivo `div-logo-oficial.png`. A evolução da interface deve priorizar responsividade, acessibilidade, componentização e transições fluidas.
 
 ## Deploy (Vercel)
 

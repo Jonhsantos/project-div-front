@@ -9,6 +9,9 @@ lerna-debug.log*
 
 .playwright-mcp
 
+# Arquivos de design locais
+*.pen
+
 node_modules
 dist
 dist-ssr
